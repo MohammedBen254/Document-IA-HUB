@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Tableau de Bord</h2>
+        <p class="text-muted">Statistiques et gestion des documents</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+            <i class="bi bi-upload me-2"></i>Ajouter un Document
+        </button>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Répartition des Documents</h5>
+            </div>
+            <div class="card-body">
+                <img src="data:image/png;base64,{{ chart }}" alt="Document Statistics" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <h4 class="mb-3">Types de Documents</h4>
+    {% for stat in stats %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 card-hover stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h5 class="card-title">{{ stat[0] }}</h5>
+                    <span class="badge bg-primary rounded-pill">{{ stat[1] }}</span>
+                </div>
+                <p class="card-text text-muted">Documents classés</p>
+                <a href="{{ url_for('documents_by_type', doc_type=stat[0]) }}" class="btn btn-sm btn-outline-primary">
+                    Voir les documents <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Upload Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Téléverser un Document</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="documentFile" class="form-label">Sélectionnez un fichier PDF</label>
+                        <input class="form-control" type="file" id="documentFile" name="file" accept=".pdf" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Téléverser</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

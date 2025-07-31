@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Résultats du Traitement</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    Document traité avec succès!
+                </div>
+
+                <div class="mb-4">
+                    <h5>Résumé du Document</h5>
+                    <div class="p-3 bg-light rounded">
+                        {{ summary }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                Type de Document
+                            </div>
+                            <div class="card-body">
+                                <span class="badge bg-primary">{{ type }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                Informations Extraites
+                            </div>
+                            <div class="card-body">
+                                <ul class="nav nav-tabs" id="entitiesTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="people-tab" data-bs-toggle="tab" data-bs-target="#people" type="button">
+                                            Personnes
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="orgs-tab" data-bs-toggle="tab" data-bs-target="#orgs" type="button">
+                                            Organisations
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="dates-tab" data-bs-toggle="tab" data-bs-target="#dates" type="button">
+                                            Dates
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content p-3 border border-top-0 rounded-bottom" id="entitiesTabContent">
+                                    <div class="tab-pane fade show active" id="people" role="tabpanel">
+                                        {% if entities.PER %}
+                                            <ul class="list-group">
+                                                {% for person in entities.PER %}
+                                                <li class="list-group-item">{{ person }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <p class="text-muted">Aucune personne identifiée</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="tab-pane fade" id="orgs" role="tabpanel">
+                                        {% if entities.ORG %}
+                                            <ul class="list-group">
+                                                {% for org in entities.ORG %}
+                                                <li class="list-group-item">{{ org }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <p class="text-muted">Aucune organisation identifiée</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="tab-pane fade" id="dates" role="tabpanel">
+                                        {% if entities.DATE %}
+                                            <ul class="list-group">
+                                                {% for date in entities.DATE %}
+                                                <li class="list-group-item">{{ date }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <p class="text-muted">Aucune date identifiée</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-white text-end">
+                <a href="{{ url_for('document_detail', doc_id=doc_id) }}" class="btn btn-primary">
+                    Voir le document complet
+                </a>
+                <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                    Retour à l'accueil
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent de Tracking Intelligent</title>
+  <style>
+    :root {
+      --main-color: #4f46e5;
+      --bg-color: #f9fafb;
+      --text-dark: #1f2937;
+      --text-light: #6b7280;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+    }
+
+    header {
+      background-color: white;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    header h1 {
+      color: var(--main-color);
+      font-size: 24px;
+    }
+
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 500;
+    }
+
+    .hero {
+      padding: 80px 40px;
+      text-align: center;
+    }
+
+    .hero h2 {
+      font-size: 42px;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-light);
+      max-width: 700px;
+      margin: 0 auto 30px;
+    }
+
+    .cta-button {
+      background-color: var(--main-color);
+      color: white;
+      padding: 14px 28px;
+      border: none;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
+      padding: 60px 40px;
+    }
+
+    .feature {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .feature h3 {
+      color: var(--main-color);
+      margin-bottom: 10px;
+    }
+
+    .feature p {
+      color: var(--text-light);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      font-size: 14px;
+      color: var(--text-light);
+    }
+
+    @media (max-width: 600px) {
+      .hero h2 {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>TrackSmart</h1>
+  <nav>
+    <a href="#features">Fonctionnalités</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>Optimisez vos conversions grâce à notre Agent Intelligent</h2>
+  <p>Suivez le comportement de vos visiteurs en temps réel, détectez les produits qui les intéressent, et déclenchez des actions ciblées automatiquement.</p>
+  <button class="cta-button">Commencer maintenant</button>
+</section>
+
+<section class="features" id="features">
+  <div class="feature">
+    <h3>Suivi en temps réel</h3>
+    <p>Obtenez une visibilité complète sur les pages visitées, les clics, et le parcours de chaque utilisateur.</p>
+  </div>
+  <div class="feature">
+    <h3>Lead Scoring Intelligent</h3>
+    <p>Chaque action utilisateur est analysée et transformée en score pour identifier les leads les plus intéressés.</p>
+  </div>
+  <div class="feature">
+    <h3>Détection d’intérêt produit</h3>
+    <p>Grâce à la catégorisation intelligente, repérez les familles de produits qui captent l’attention de chaque utilisateur.</p>
+  </div>
+  <div class="feature">
+    <h3>Formulaires dynamiques</h3>
+    <p>Déclenchez automatiquement des formulaires ou des messages pour capter les coordonnées des leads chauds.</p>
+  </div>
+</section>
+
+<footer id="contact">
+  © 2025 TrackSmart – Contact : contact@tracksmart.ai
+</footer>
+
+</body>
+</html>
