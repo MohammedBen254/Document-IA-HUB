@@ -16,21 +16,25 @@
                 <div class="mb-3">
                     <table class="table table-sm">
                         <tr>
+                            <th width="30%">Title</th>
+                            <td><b>{{ document['title'] }}</b></td>
+                        </tr>
+                        <tr>
                             <th width="30%">Type de document</th>
-                            <td><span class="badge bg-primary">{{ document[1] }}</span></td>
+                            <td><span class="badge bg-primary">{{ document['doc_type'] }}</span></td>
                         </tr>
                         <tr>
                             <th>Date de téléversement</th>
-                            <td>{{ document[5] }}</td>
+                            <td>{{  document['created_at']  }}</td>
                         </tr>
                     </table>
                 </div>
 
                 <div class="d-grid gap-2 d-md-flex">
                     <a href="{{ url_for('documents_by_type', doc_type=document[1]) }}" class="btn btn-outline-primary">
-                        <i class="bi bi-list-ul me-1"></i> Voir tous les {{ document[1] }}s
+                        <i class="bi bi-list-ul me-1"></i> Voir tous les documents
                     </a>
-                    <a href="/{{ document[4] }}" target="_blank" class="btn btn-primary">
+                    <a href="{{ document['file_path'] }}" target="_blank" class="btn btn-primary">
                         <i class="bi bi-file-pdf me-1"></i> Ouvrir le PDF
                     </a>
                 </div>

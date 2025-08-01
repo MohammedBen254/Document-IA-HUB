@@ -20,7 +20,7 @@ class AgentGemini:
         return response.text.strip() if response else "Aucun résumé généré."
 
     def extract_information(self, text):
-        """Extrait les informations importantes du texte"""
+        """Extrait l`es informations importantes du texte"""
         prompt = f"""Extrayez les informations suivantes du texte:
         - Noms de personnes (PER)
         - Organisations (ORG)
@@ -28,10 +28,37 @@ class AgentGemini:
         - Type de document (choisir parmi: {self.labels})
         - Un résumé simple
         
-        Réponse en JSON avec les clés: 'PER', 'ORG', 'DATE', 'type', 'summary'
-        Texte: {text}"""
+        Réponse en JSON valide avec les clés: 'PER', 'ORG', 'DATE', 'type', 'summary'
+        Exemple :
+        {{
+            "PER": ["Jean Dupont"],
+            "ORG": ["OpenAI"],
+            "DATE": ["25/07/2025"],
+            "type": "Facture",
+            "summary": "Résumé du document ici."
+        }}
+
+        Texte : {text}"""
+
+        try:
+            response = self.chat.send_message(prompt)
+            text_response = response.text.strip()
+
+            # Try to extract JSON safely
+            json_text = re.search(r'\{.*\}', text_response, re.DOTALL)
+            if not json_text:
+                raise ValueError("Réponse JSON introuvable dans :\n" + text_response)
+            
+            clean_json = json.loads(json_text.group())
+            return clean_json
+        except Exception as e:
+            return {
+                "PER": [],
+                "ORG": [],
+                "DATE": [],
+                "type": "Autre",
+                "summary": "Aucune information extraite.",
+                "error": str(e)
+            }
+
         
-        response = self.chat.send_message(prompt)
-        clean = re.sub(r'```json\n(.*?)\n```', r'\1', response.text, flags=re.DOTALL).strip()
-        return json.loads(clean) if clean else {"error": "Aucune information extraite."}
-    

@@ -4,6 +4,8 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for, s
 from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
+import matplotlib
+matplotlib.use('Agg')  # Set backend before importing pyplot
 import matplotlib.pyplot as plt
 import io
 import base64
@@ -26,7 +28,6 @@ ocr_agent = AgentOCR()
 gemini_agent = AgentGemini()
 db = DocumentDatabase(app.config['DATABASE'])
 
-# ... (le reste de votre code Flask reste inchangé)
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -43,7 +44,15 @@ def process_uploaded_file(file):
         text = ocr_agent.extract_text_from_pdf(file_path)
         doc_type = ocr_agent.classify_document(text)
         summary = gemini_agent.generate_summary(text)
-        extracted_info = gemini_agent.extract_information(text)
+        info = gemini_agent.extract_information(text)
+        doc_type = info.get("type", "Autre")
+        summary = info.get("summary", "")
+        entities = {
+            "PER": info.get("PER", []),
+            "ORG": info.get("ORG", []),
+            "DATE": info.get("DATE", [])
+        }
+
         
         # Save to database
         doc_id = db.add_document(
@@ -51,7 +60,7 @@ def process_uploaded_file(file):
             doc_type=doc_type,
             summary=summary,
             file_path=file_path,
-            entities=extracted_info
+            entities=entities
         )
         
         # Move file to class folder
@@ -71,7 +80,7 @@ def process_uploaded_file(file):
             'doc_id': doc_id,
             'type': doc_type,
             'summary': summary,
-            'entities': extracted_info
+            'entities': entities
         }
     except Exception as e:
         return {
@@ -84,23 +93,20 @@ def generate_stats_chart():
     types = [stat[0] for stat in stats]
     counts = [stat[1] for stat in stats]
     
-    plt.figure(figsize=(8, 6))
-    plt.bar(types, counts, color='skyblue')
-    plt.title('Document Types Distribution')
-    plt.xlabel('Document Type')
-    plt.ylabel('Count')
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.bar(types, counts, color='skyblue')
+    ax.set_title('Document Types Distribution')
+    ax.set_xlabel('Document Type')
+    ax.set_ylabel('Count')
     plt.xticks(rotation=45)
     plt.tight_layout()
     
-    # Save plot to a bytes buffer
     buf = io.BytesIO()
-    plt.savefig(buf, format='png')
+    plt.savefig(buf, format='png', dpi=100)
     buf.seek(0)
-    plt.close()
+    plt.close(fig)  # Explicitly close the figure
     
-    # Encode plot image to base64
-    image_base64 = base64.b64encode(buf.read()).decode('utf-8')
-    return image_base64
+    return base64.b64encode(buf.read()).decode('utf-8')
 
 # Flask Routes
 @app.route('/')
@@ -157,6 +163,7 @@ def documents_by_type(doc_type):
 @app.route('/document/<int:doc_id>')
 def document_detail(doc_id):
     doc_data = db.get_document_details(doc_id)
+    print(doc_data)
     if not doc_data:
         flash('Document not found', 'error')
         return redirect(url_for('index'))
@@ -169,7 +176,8 @@ def document_detail(doc_id):
     
     return render_template('document_detail.html', 
                          document=doc_data['document'],
-                         entities=entities)
+                         entities=entities,
+                         path=doc_data['document']['file_path'])
 
 @app.route('/search')
 def search():

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row mb-4">
+<div class="row mb-4 m-4 upload">
     <div class="col-md-8">
         <h2>Tableau de Bord</h2>
         <p class="text-muted">Statistiques et gestion des documents</p>
@@ -13,18 +13,6 @@
     </div>
 </div>
 
-<div class="row mb-4">
-    <div class="col-md-12">
-        <div class="card shadow">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">Répartition des Documents</h5>
-            </div>
-            <div class="card-body">
-                <img src="data:image/png;base64,{{ chart }}" alt="Document Statistics" class="img-fluid">
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="row">
     <h4 class="mb-3">Types de Documents</h4>
@@ -44,6 +32,18 @@
         </div>
     </div>
     {% endfor %}
+</div>
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Répartition des Documents</h5>
+            </div>
+            <div class="card-body">
+                <img src="data:image/png;base64,{{ chart }}" alt="Document Statistics" class="img-fluid">
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Upload Modal -->
